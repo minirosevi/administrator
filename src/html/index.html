@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+<body ng-app="myApp" ng-controller="myCtrl" ng-cloak="">
+<header class="bg-blue text-white f14 header bold"> 通用权限管理</header>
+<section class="section">
+    <aside class="aside pl15 pr15">
+        <div class="title f12 text-green">
+            <i class="glyphicon glyphicon-chevron-right"></i> 我的工作平台
+        </div>
+        <div class="type f12">
+            <div class="bold" ng-click="list()">
+                <i class="glyphicon glyphicon-plus"></i> 权限管理
+            </div>
+            <ul ng-show="openlist">
+                <li ui-sref="function">
+                    <i class="glyphicon glyphicon-hand-right"></i>
+                    {{arrlist[0]}}
+                </li>
+                <li ui-sref="role">
+                    <i class="glyphicon glyphicon-hand-right"></i>
+                    {{arrlist[1]}}
+                </li>
+                <li ui-sref="user">
+                    <i class="glyphicon glyphicon-hand-right"></i>
+                    {{arrlist[2]}}
+                </li>
+            </ul>
+        </div>
+    </aside>
+    <div class="content">
+        <div ui-view>
+        </div>
+    </div>
+</section>
+
+<script src="../js/angular.js"></script>
+<script src="../js/angular-ui-router.js"></script>
+<script src="../js/jquery.js"></script>
+<script>
+    var app = angular.module("myApp", ["ui.router"]);
+    app.controller("myCtrl", function ($scope, alldata) {
+        $scope.type = ["ID", "登录名", "真实姓名", "角色", "手机", "邮箱", "状态", "创建时间", "操作"];
+        $scope.arrlist = ['功能配置', '角色管理', '用户管理'];
+        $scope.uilist = ['function', 'role', 'user'];
+        $scope.list = function () {
+            if ($scope.openlist) {
+                $scope.openlist = false;
+            } else {
+                $scope.openlist = true;
+            }
+        };
+    });
+    app.config(function ($stateProvider) {
+        $stateProvider
+                .state("function", {
+                    url: "/function",
+                    template: "<h5 class='title bold'>功能配置</h5>"
+                })
+                .state("role", {
+                    url: "/role",
+                    template: "<h5 class='title bold'>角色管理</h5>"
+                })
+                .state("user", {
+                    url: "/user",
+                    templateUrl: "./page/user.html"
+                });
+    });
+    app.directive("choice", function () {
+        return {
+            restrict: "EAMC",
+            replace: true,
+
+            template: '<div>' +
+            '<label for="sel1">角色' +
+            '<select name="" id="sel1" ng-model="selectName" ng-options="item for item in names">' +
+            '</select>' +
+            '</label> | ' +
+            '<label for="sel2">状态' +
+            '<select name="" id="sel2" ng-model="selectStatus" ng-options="item for item in status">' +
+            '</select>' +
+            '</label> | ' +
+            '<label for="inp">登录名' +
+            '<input type="text" id="inp" ng-model="search.loginname">' +
+            '<button class="btn">查询</button>' +
+            '</label>' +
+            '</div>',
+            controller: function ($scope) {
+                $scope.names = ["你", "我", "他"];
+                $scope.status = ["全部", "部分"];
+            },
+            compile: function () {
+                return {
+                    post: function (scope, iElement, iAttrs) {
+
+                    }
+                }
+            }
+        }
+    });
+    app.directive("page", function () {
+        return {
+            restrict: "EAMC",
+            replace: true,
+            scope: true,
+            template: '<div>' +
+            '<choice></choice>' +
+            '<h6 class="text-light-blue pl10 lists">列表</h6>' +
+            '<table class="table f12">' +
+            '<thead>' +
+            '<tr>' +
+            '<th ng-repeat="i in type">{{i}}</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '<tr ng-repeat="obj in alldata.thirdata | filter:fildata ">' +
+            '<td>{{obj.ID}}</td>' +
+            '<td>{{obj.loginname}}</td>' +
+            '<td>{{obj.name}}</td>' +
+            '<td>{{obj.role}}</td>' +
+            '<td>{{obj.telephone}}</td>' +
+            '<td>{{obj.email}}</td>' +
+            '<td>{{obj.state}}</td>' +
+            '<td>{{obj.creattime}}</td>' +
+            '<td>' +
+            '<span class="alter">修改</span> | ' +
+            '<span class="del">删除</span>' +
+            '</td>' +
+            '</tr>' +
+            '</tbody>' +
+            '</table>' +
+            '</div>',
+            controller: function ($scope,alldata) {
+                $scope.alldata=alldata;
+                $scope.fildata={};
+            },
+            compile: function () {
+                return {
+                    post: function (scope, iElement, iAttrs) {
+                        $(iElement).on('click','.del',function(){
+                           $(this).parents("tr").remove();
+                       });
+                        $(iElement).on('click','.btn',function(){
+                            scope.$apply(function(){
+                               scope.fildata.loginname=scope.search.loginname;
+                            });
+                        });
+                    }
+                }
+            }
+        }
+    });
+    app.service("alldata", function () {
+        return {
+            fstdata: [
+                {
+                    id: 1,
+                    name: '个人中心',
+                    nickname: '账户管理'
+                },
+                {
+                    id: 2,
+                    name: '系统设置',
+                    nickname: '权限管理'
+                }
+            ],
+            secdata: [
+                {
+                    id: 11,
+                    parentid: 1,
+                    name: '个人信息',
+                    page: 'grxx.html'
+                },
+                {
+                    id: 12,
+                    parentid: 1,
+                    name: '修改密码',
+                    page: 'xgmm.html'
+                },
+                {
+                    id: 21,
+                    parentid: 2,
+                    name: '功能配置',
+                    page: 'gnpz.html'
+                },
+                {
+                    id: 22,
+                    parentid: 2,
+                    name: '角色管理',
+                    page: 'jsgl.html'
+                },
+                {
+                    id: 23,
+                    parentid: 2,
+                    name: '用户管理',
+                    page: 'yhgl.html'
+                }
+            ],
+            thirdata: [
+                {
+                    ID: 1,
+                    parentid: 23,
+                    loginname: 'zhangsan',
+                    name: '张三',
+                    role: '13管理员aaa',
+                    telephone: '15098950322',
+                    email: '837990335@qq.com',
+                    state: '启用',
+                    creattime: '2014-07-27 16:56'
+                },
+                {
+                    ID: 2,
+                    parentid: 23,
+                    loginname: 'lisi',
+                    name: '李四',
+                    role: '13管理员aaa',
+                    telephone: '15098950322',
+                    email: '837990335@qq.com',
+                    state: '禁用',
+                    creattime: '2014-07-27 16:56'
+                },
+                {
+                    ID: 3,
+                    parentid: 23,
+                    loginname: 'wangwu',
+                    name: '王五',
+                    role: '13管理员aaa',
+                    telephone: '15098950322',
+                    email: '837990335@qq.com',
+                    state: '启用',
+                    creattime: '2014-07-27 16:56'
+                },
+                {
+                    ID: 4,
+                    parentid: 23,
+                    loginname: 'zhangchen',
+                    name: '张晨',
+                    role: '13管理员aaa',
+                    telephone: '15098950322',
+                    email: '837990335@qq.com',
+                    state: '启用',
+                    creattime: '2014-07-27 16:56'
+                },
+                {
+                    ID: 5,
+                    parentid: 23,
+                    loginname: 'liucheng',
+                    name: '刘成',
+                    role: '管理员',
+                    telephone: '15098950322',
+                    email: '837990335@qq.com',
+                    state: '禁用',
+                    creattime: '2014-07-27 16:56'
+                },
+                {
+                    ID: 6,
+                    parentid: 23,
+                    loginname: 'liji',
+                    name: '李继',
+                    role: '13管理员aaa',
+                    telephone: '15098950322',
+                    email: '837990335@qq.com',
+                    state: '禁用',
+                    creattime: '2014-07-27 16:56'
+                },
+                {
+                    ID: 7,
+                    parentid: 23,
+                    loginname: 'yuantao',
+                    name: '袁涛',
+                    role: '13管理',
+                    telephone: '15098950322',
+                    email: '837990335@qq.com',
+                    state: '启用',
+                    creattime: '2014-07-27 16:56'
+                },
+                {
+                    ID: 8,
+                    parentid: 23,
+                    loginname: 'wangjian',
+                    name: '王建',
+                    role: '管理员',
+                    telephone: '15098950322',
+                    email: '837990335@qq.com',
+                    state: '禁用',
+                    creattime: '2014-07-27 16:56'
+                }
+            ],
+            fourdata: [
+                {
+                    ID: 1,
+                    role: "管理员",
+                    state: "启用",
+                    orders: 0,
+                    creattime: '2014-07-27 16:35'
+                },
+                {
+                    ID: 2,
+                    role: "管理员2",
+                    state: "禁用",
+                    orders: 2,
+                    creattime: '2014-07-27 16:35'
+                },
+                {
+                    ID: 3,
+                    role: "管理员",
+                    state: "禁用",
+                    orders: 5,
+                    creattime: '2014-07-27 16:35'
+                },
+                {
+                    ID: 4,
+                    role: "管理员2",
+                    state: "启用",
+                    orders: 0,
+                    creattime: '2014-07-27 16:35'
+                },
+                {
+                    ID: 5,
+                    role: "管理员0",
+                    state: "启用",
+                    orders: 2,
+                    creattime: '2014-07-27 16:35'
+                },
+                {
+                    ID: 6,
+                    role: "管理员1",
+                    state: "禁用",
+                    orders: 0,
+                    creattime: '2014-07-27 16:35'
+                },
+                {
+                    ID: 7,
+                    role: "管理员是",
+                    state: "启用",
+                    orders: 0,
+                    creattime: '2014-07-27 16:35'
+                },
+                {
+                    ID: 8,
+                    role: "管理员0",
+                    state: "启用",
+                    orders: 1,
+                    creattime: '2014-07-27 16:35'
+                },
+                {
+                    ID: 9,
+                    role: "管理员2",
+                    state: "启用",
+                    orders: 0,
+                    creattime: '2014-07-27 16:35'
+                },
+                {
+                    ID: 10,
+                    role: "管理2",
+                    state: "启用",
+                    orders: 0,
+                    creattime: '2014-07-27 16:35'
+                },
+                {
+                    ID: 11,
+                    role: "管理员2",
+                    state: "禁用",
+                    orders: 0,
+                    creattime: '2014-07-27 16:35'
+                }
+
+            ]
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+body {
+  font-size: 14px; }
+
+.header {
+  height: 40px;
+  line-height: 40px;
+  text-indent: 10px; }
+
+.section {
+  display: flex; }
+
+.aside {
+  line-height: 30px;
+  text-align: center; }
+  .aside .bold, .aside li {
+    border-bottom: 1px solid #ccc; }
+  .aside .bg {
+    background-color: #0074d9; }
+  .aside .bgText {
+    color: white; }
+
+.content {
+  flex: 1; }
+  .content .title {
+    border-bottom: 1px solid #ccc;
+    line-height: 30px; }
+  .content #inp {
+    border: 1px solid #666; }
+  .content label {
+    font-size: 12px; }
+  .content .lists {
+    border-bottom: 1px solid #ccc;
+    line-height: 20px; }
+  .content table th {
+    text-align: center; }
+  .content table span {
+    cursor: pointer;
+    text-decoration: underline; }
+
+.type {
+  cursor: pointer; }
+
+/*# sourceMappingURL=index.css.map */
