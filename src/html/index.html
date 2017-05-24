@@ -229,6 +229,11 @@
                             var pagenum = ($(this).text()) * 1;
                             $('.input').val(pagenum);
                             changepage(pagenum, scope.data.num);
+                            $(this).css({
+                                color:"blue"
+                            }).siblings('.pages').css({
+                                color:"#000"
+                            })
                         });
 
                         // 删除;
@@ -307,11 +312,20 @@
                         $(iElement).on("click", ".next", function () {
                             var val = $('.input').val() * 1;
                             val++;
-                            if (val > scope.pages) {
-                                val = scope.pages;
+                            if (val > scope.data.pages()) {
+                                val = scope.data.pages();
                             }
                             $('.input').val(val);
-                            changepage(val, scope.num);
+                            changepage(val, scope.data.num);
+                            $('.pages').each(function(i,obj){
+                                if($(this).text()==val){
+                                    $(this).css({
+                                        color:"blue"
+                                    }).siblings(".pages").css({
+                                        color:"#000"
+                                    })
+                                }
+                            });
                         });
                         // 上一页;
                         $(iElement).on("click", ".prev", function () {
@@ -321,7 +335,16 @@
                                 val = 1;
                             }
                             $('.input').val(val);
-                            changepage(val, scope.num);
+                            changepage(val, scope.data.num);
+                            $('.pages').each(function(i,obj){
+                                if($(this).text()==val){
+                                    $(this).css({
+                                        color:"blue"
+                                    }).siblings(".pages").css({
+                                        color:"#000"
+                                    })
+                                }
+                            });
                         });
                         // init
                         function init() {
