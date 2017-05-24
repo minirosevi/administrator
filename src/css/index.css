@@ -1,43 +1,96 @@
 body {
-  font-size: 14px; }
+    font-size: 14px;
+}
 
 .header {
-  height: 40px;
-  line-height: 40px;
-  text-indent: 10px; }
+    height: 40px;
+    line-height: 40px;
+    text-indent: 10px;
+}
 
 .section {
-  display: flex; }
+    display: flex;
+}
 
 .aside {
-  line-height: 30px;
-  text-align: center; }
-  .aside .bold, .aside li {
-    border-bottom: 1px solid #ccc; }
-  .aside .bg {
-    background-color: #0074d9; }
-  .aside .bgText {
-    color: white; }
+    line-height: 30px;
+    text-align: center;
+}
+
+.aside .bold, .aside li {
+    border-bottom: 1px solid #ccc;
+}
+
+.aside .bg {
+    background-color: #0074d9;
+}
+
+.aside .bgText {
+    color: white;
+}
+
+.input {
+    width: 40px;
+    border: 1px solid #333;
+}
 
 .content {
-  flex: 1; }
-  .content .title {
+    flex: 1;
+}
+
+.content .title {
     border-bottom: 1px solid #ccc;
-    line-height: 30px; }
-  .content #inp {
-    border: 1px solid #666; }
-  .content label {
-    font-size: 12px; }
-  .content .lists {
+    line-height: 30px;
+}
+
+.content #inp {
+    border: 1px solid #666;
+}
+
+.content label {
+    font-size: 12px;
+}
+
+.content .lists {
     border-bottom: 1px solid #ccc;
-    line-height: 20px; }
-  .content table th {
-    text-align: center; }
-  .content table span {
+    line-height: 20px;
+}
+
+.content table th {
+    text-align: center;
+}
+
+.content table span {
     cursor: pointer;
-    text-decoration: underline; }
+    text-decoration: underline;
+}
 
 .type {
-  cursor: pointer; }
+    cursor: pointer;
+}
+
+.alert {
+    width: 200px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.alert button {
+    width: 45%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+
+span {
+    cursor: pointer;
+}
 
 /*# sourceMappingURL=index.css.map */

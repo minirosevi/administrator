@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/index.css">
 </head>
-<body ng-app="myApp" ng-controller="myCtrl" ng-cloak="">
+<body ng-app="myApp" ng-controller="myCtrl" ng-cloak>
 <header class="bg-blue text-white f14 header bold"> 通用权限管理</header>
 <section class="section">
     <aside class="aside pl15 pr15">
@@ -45,8 +45,18 @@
 <script src="../js/angular-ui-router.js"></script>
 <script src="../js/jquery.js"></script>
 <script>
+    function change(pages, len) {
+        var str = "<div><span>一共" + len + "条数据</span>  <span class='p10 prev'>上一页</span>";
+        for (var i = 1; i <= pages * 1; i++) {
+            str += "<span class='p10 pages'>" + i + "</span>";
+        }
+        str += '<span class="next p10">下一页</span>   <span>第 <input type="number" class="input">页</span></div>';
+        return str;
+    }
+    ;
+
     var app = angular.module("myApp", ["ui.router"]);
-    app.controller("myCtrl", function ($scope, alldata) {
+    app.controller("myCtrl", function ($rootScope, $scope, alldata) {
         $scope.type = ["ID", "登录名", "真实姓名", "角色", "手机", "邮箱", "状态", "创建时间", "操作"];
         $scope.arrlist = ['功能配置', '角色管理', '用户管理'];
         $scope.uilist = ['function', 'role', 'user'];
@@ -57,7 +67,20 @@
                 $scope.openlist = true;
             }
         };
+
+        // 数据;
+        $rootScope.alldata = alldata;
+
+        $rootScope.data = {
+            num: 3,// 每页有几条;
+            len: $rootScope.alldata.thirdata.length,// 几条数据;
+            pages: function () {// 几页;
+                var pagenum = Math.ceil(this.len / this.num);
+                return pagenum;
+            }
+        }
     });
+
     app.config(function ($stateProvider) {
         $stateProvider
                 .state("function", {
@@ -73,6 +96,7 @@
                     templateUrl: "./page/user.html"
                 });
     });
+
     app.directive("choice", function () {
         return {
             restrict: "EAMC",
@@ -80,38 +104,27 @@
 
             template: '<div>' +
             '<label for="sel1">角色' +
-            '<select name="" id="sel1" ng-model="selectName" ng-options="item for item in names">' +
+            '<select name="" id="sel1"  class="sel1" ng-model="search.role" ng-options="item for item in names">' +
             '</select>' +
             '</label> | ' +
             '<label for="sel2">状态' +
-            '<select name="" id="sel2" ng-model="selectStatus" ng-options="item for item in status">' +
+            '<select name="" id="sel2" class="sel2" ng-model="search.state" ng-options="item for item in status">' +
             '</select>' +
             '</label> | ' +
             '<label for="inp">登录名' +
             '<input type="text" id="inp" ng-model="search.loginname">' +
             '<button class="btn">查询</button>' +
             '</label>' +
-            '</div>',
-            controller: function ($scope) {
-                $scope.names = ["你", "我", "他"];
-                $scope.status = ["全部", "部分"];
-            },
-            compile: function () {
-                return {
-                    post: function (scope, iElement, iAttrs) {
-
-                    }
-                }
-            }
+            '</div>'
         }
     });
+
     app.directive("page", function () {
         return {
             restrict: "EAMC",
             replace: true,
-            scope: true,
+            scope: false,
             template: '<div>' +
-            '<choice></choice>' +
             '<h6 class="text-light-blue pl10 lists">列表</h6>' +
             '<table class="table f12">' +
             '<thead>' +
@@ -120,7 +133,7 @@
             '</tr>' +
             '</thead>' +
             '<tbody>' +
-            '<tr ng-repeat="obj in alldata.thirdata | filter:fildata ">' +
+            '<tr ng-repeat="obj in alldata.thirdata | filter:fildata" ID="{{obj.ID}}">' +
             '<td>{{obj.ID}}</td>' +
             '<td>{{obj.loginname}}</td>' +
             '<td>{{obj.name}}</td>' +
@@ -130,33 +143,212 @@
             '<td>{{obj.state}}</td>' +
             '<td>{{obj.creattime}}</td>' +
             '<td>' +
-            '<span class="alter">修改</span> | ' +
+            '<span class="alter" index="{{obj.ID}}">修改</span> | ' +
             '<span class="del">删除</span>' +
             '</td>' +
-            '</tr>' +
             '</tbody>' +
             '</table>' +
-            '</div>',
-            controller: function ($scope,alldata) {
-                $scope.alldata=alldata;
-                $scope.fildata={};
+            '</div>'
+        }
+    });
+
+    app.directive("clicks", function ($rootScope) {
+        return {
+            restrict: "EAMC",
+            replace: true,
+            scope: true,
+            template: change($rootScope.data.pages(), $rootScope.data.len)
+        }
+    });
+
+    app.directive("alerts", function () {
+        return {
+            restrict: "EAMC",
+            replace: true,
+            scope: true,
+            template: '<div><div class="alert bg-light-gray"><label>登录名： <input type="text" placeholder="登录名" class="loginname"></label><label>登录名： <input type="text" placeholder="真实姓名" class="name"></label><label>角色： <input type="text" placeholder="角色" class="role"></label><label>手机： <input type="phone" placeholder="手机" class="phone"></label><label>邮箱： <input type="email" placeholder="邮箱" class="email"></label><label>状态： <select name="" id="sel"><option value="">启用</option><option value="">禁用</option></select></label><label><button class="true bg-gray">确定</button><button class="false">取消</button></label></div></div>'
+        }
+    });
+
+    app.directive("contentmenu", function () {
+        return {
+            restrict: "EAMC",
+            replace: true,
+            scope: false,
+            template: '<div><choice></choice><page></page><clicks></clicks><alerts></alerts></div>',
+
+            controller: function ($scope, $rootScope, alldata) {
+                $scope.names = ["管理员", "13管理员aaa", "13管理"];
+                $scope.status = ["启用", "禁用"];
+                $scope.alldata = $rootScope.alldata;
+                $scope.fildata = {};
+                $scope.objdata = {};
+                $scope.data = $rootScope.data;
+                $scope.len = "";
+                $scope.$watch("data", function (obj) {
+                   // console.log(obj)
+                });
+
             },
             compile: function () {
                 return {
-                    post: function (scope, iElement, iAttrs) {
-                        $(iElement).on('click','.del',function(){
-                           $(this).parents("tr").remove();
-                       });
-                        $(iElement).on('click','.btn',function(){
-                            scope.$apply(function(){
-                               scope.fildata.loginname=scope.search.loginname;
+                    post: function (scope, iElement, iAttrs, ctrl) {
+                        init();
+                        // 查询;
+                        $(iElement).on("click", ".btn", function () {
+                            scope.$apply(function () {
+                                $('tbody').find("tr").show();
+                                scope.fildata.loginname = scope.search.loginname;
                             });
                         });
+                        $(iElement).on('change', "#sel1", function () {
+                            scope.$apply(function () {
+                                $('tbody').find("tr").show();
+                                scope.fildata.role = scope.search.role;
+                            });
+                        });
+                        $(iElement).on('change', "#sel2", function () {
+                            scope.$apply(function () {
+                                $('tbody').find("tr").show();
+                                scope.fildata.state = scope.search.state;
+                            });
+                        });
+                        // 第几页;
+                        $(iElement).on("click", ".input", function () {
+                            if ($(this).val() < 1) {
+                                $(this).val(1);
+                            } else if ($(this).val() > scope.data.pages()) {
+                                $(this).val(scope.data.pages());
+                            }
+                            var val = $(this).val() * 1;
+                            changepage(val, scope.data.num);
+                        });
+
+                        // 点击页数;
+                        $(iElement).on('click', '.pages', function () {
+                            var pagenum = ($(this).text()) * 1;
+                            $('.input').val(pagenum);
+                            changepage(pagenum, scope.data.num);
+                        });
+
+                        // 删除;
+                        $(iElement).on("click", ".del", function () {
+                            var parent = $(this).parents("tr");
+                            var parId = parent.attr("ID");
+                            scope.alldata.thirdata.forEach(function (obj, i) {
+
+                                if (obj.ID == parId) {
+                                    scope.$apply(function () {
+                                        scope.alldata.thirdata.splice(i, 1);
+                                        parent.remove();
+                                        scope.data.len = scope.alldata.thirdata.length;
+                                        scope.$emit("data", {
+                                            len: scope.data.len
+                                        })
+                                    });
+                                }
+                            });
+                        });
+
+                        // 修改;
+                        $(iElement).on("click", '.alter', function () {
+                            var parent = $(this).parents("tr");
+                            var parId = parent.attr("ID");
+                            $(".alert").attr("index",parId);
+                            scope.alldata.thirdata.forEach(function (obj, i) {
+                                if (obj.ID == parId) {
+                                    scope.$apply(function () {
+                                        $(".alert").show();
+                                        $('.name').val(obj.name);
+                                        $('.email').val(obj.email);
+                                        $('.role').val(obj.role);
+                                        $('.phone').val(obj.telephone);
+                                        $('.loginname').val(obj.loginname);
+                                        $('#sel').find("option:selected").text(obj.state);
+                                    });
+                                }
+                            });
+                        });
+                        $(iElement).on('click', '.false', function () {
+                            $('.name').val('');
+                            $('.email').val('');
+                            $('.role').val('');
+                            $('.phone').val('');
+                            $('#sel').val('');
+                            $('.loginname').val('');
+                            $(this).parents('.alert').hide();
+                        });
+                        $(iElement).on('click', '.true', function () {
+                            var id=$(this).parents(".alert").attr('index');
+                            scope.alldata.thirdata.forEach(function (obj, i) {
+                               if(obj.ID==id){
+                                   scope.$apply(function(){
+                                       obj.loginname=$('.loginname').val();
+                                       obj.name=$('.name').val();
+                                       obj.email=$('.email').val();
+                                       obj.role=$('.role').val();
+                                       obj.telephone=$('.phone').val();
+                                       obj.state= $("#sel").find("option:selected").text();
+                                       obj.creattime=new Date().toLocaleString();
+                                       $('.name').val('');
+                                       $('.email').val('');
+                                       $('.role').val('');
+                                       $('.phone').val('');
+                                       $('#sel').val('');
+                                       $('.loginname').val('');
+                                     
+                                   });
+
+                               }
+                                $('.alert').hide();
+                            });
+                        });
+                        // 下一页;
+                        $(iElement).on("click", ".next", function () {
+                            var val = $('.input').val() * 1;
+                            val++;
+                            if (val > scope.pages) {
+                                val = scope.pages;
+                            }
+                            $('.input').val(val);
+                            changepage(val, scope.num);
+                        });
+                        // 上一页;
+                        $(iElement).on("click", ".prev", function () {
+                            var val = $('.input').val() * 1;
+                            val--;
+                            if (val < 1) {
+                                val = 1;
+                            }
+                            $('.input').val(val);
+                            changepage(val, scope.num);
+                        });
+                        // init
+                        function init() {
+                            $('.input').val(1);
+                            changepage(1, scope.data.num);
+                            $('.alert').hide();
+                        }
+
+                        function changepage(pagenum, num) {
+                            $("tbody").find("tr").hide();
+                            var start = (pagenum - 1) * num;
+                            for (var i = start; i < num * pagenum; i++) {
+                                $('tbody').find("tr").eq(i).show();
+                            }
+                        }
+
                     }
                 }
+
+
             }
+
         }
+
     });
+
+
     app.service("alldata", function () {
         return {
             fstdata: [
