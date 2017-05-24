@@ -24,8 +24,42 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/html/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.9083192">
-              <caret line="327" column="31" selection-start-line="327" selection-start-column="31" selection-end-line="327" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.67911714">
+              <caret line="197" column="29" selection-start-line="197" selection-start-column="29" selection-end-line="197" selection-end-column="29" />
+              <folding>
+                <element signature="e#1612#1962#0" expanded="false" />
+                <element signature="e#2316#2478#0" expanded="false" />
+                <element signature="e#2561#2809#0" expanded="false" />
+                <element signature="e#2860#3323#0" expanded="false" />
+                <element signature="e#5264#5455#0" expanded="false" />
+                <element signature="e#5499#6242#0" expanded="false" />
+                <element signature="e#8508#17964#0" expanded="false" />
+                <element signature="e#8775#9219#0" expanded="false" />
+                <element signature="e#9254#17946#0" expanded="false" />
+                <element signature="e#9481#9739#0" expanded="false" />
+                <element signature="e#9812#10060#0" expanded="false" />
+                <element signature="e#10133#10383#0" expanded="false" />
+                <element signature="e#10489#10907#0" expanded="false" />
+                <element signature="e#11014#11445#0" expanded="false" />
+                <element signature="e#11548#12393#0" expanded="false" />
+                <element signature="e#12498#13512#0" expanded="false" />
+                <element signature="e#13585#13968#0" expanded="false" />
+                <element signature="e#14040#15407#0" expanded="false" />
+                <element signature="e#15512#16347#0" expanded="false" />
+                <element signature="e#16452#17253#0" expanded="false" />
+                <element signature="e#17329#17511#0" expanded="false" />
+                <element signature="e#17571#17889#0" expanded="false" />
+                <element signature="e#18008#24715#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="add.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/html/page/add.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.75">
+              <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -35,7 +69,7 @@
         <entry file="file://$PROJECT_DIR$/src/css/index.css">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="43" column="5" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="5" />
+              <caret line="49" column="5" selection-start-line="49" selection-start-column="5" selection-end-line="49" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -44,14 +78,21 @@
       <file leaf-file-name="index.sass" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/css/index.sass">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.361111">
-              <caret line="43" column="13" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
+            <state vertical-scroll-proportion="-35.25">
+              <caret line="50" column="29" selection-start-line="50" selection-start-column="29" selection-end-line="50" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Html5" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -61,6 +102,7 @@
       <list>
         <option value="$PROJECT_DIR$/src/html/page/user.html" />
         <option value="$PROJECT_DIR$/src/css/index.css" />
+        <option value="$PROJECT_DIR$/src/html/page/add.html" />
         <option value="$PROJECT_DIR$/src/css/index.sass" />
         <option value="$PROJECT_DIR$/src/html/index.html" />
       </list>
@@ -167,6 +209,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="html" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="page" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="administrator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="administrator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -205,6 +269,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="FullScreen" value="false" />
+    <property name="DefaultHtmlFileTemplate" value="Html5" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
@@ -260,7 +325,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="6" y="11" width="1378" height="754" extended-state="1" />
+    <frame x="6" y="11" width="1378" height="754" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -296,7 +361,14 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="10" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/html/index.html</url>
+          <line>250</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="11" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -322,27 +394,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/css/index.css">
+    <entry file="file://$PROJECT_DIR$/src/css/index.sass">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="43" column="5" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="5" />
+        <state vertical-scroll-proportion="-35.25">
+          <caret line="50" column="29" selection-start-line="50" selection-start-column="29" selection-end-line="50" selection-end-column="29" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/css/index.sass">
+    <entry file="file://$PROJECT_DIR$/src/css/index.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.361111">
-          <caret line="43" column="13" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="49" column="5" selection-start-line="49" selection-start-column="5" selection-end-line="49" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/html/page/add.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.75">
+          <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/html/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9083192">
-          <caret line="327" column="31" selection-start-line="327" selection-start-column="31" selection-end-line="327" selection-end-column="31" />
-          <folding />
+        <state vertical-scroll-proportion="0.67911714">
+          <caret line="197" column="29" selection-start-line="197" selection-start-column="29" selection-end-line="197" selection-end-column="29" />
+          <folding>
+            <element signature="e#1612#1962#0" expanded="false" />
+            <element signature="e#2316#2478#0" expanded="false" />
+            <element signature="e#2561#2809#0" expanded="false" />
+            <element signature="e#2860#3323#0" expanded="false" />
+            <element signature="e#5264#5455#0" expanded="false" />
+            <element signature="e#5499#6242#0" expanded="false" />
+            <element signature="e#8508#17964#0" expanded="false" />
+            <element signature="e#8775#9219#0" expanded="false" />
+            <element signature="e#9254#17946#0" expanded="false" />
+            <element signature="e#9481#9739#0" expanded="false" />
+            <element signature="e#9812#10060#0" expanded="false" />
+            <element signature="e#10133#10383#0" expanded="false" />
+            <element signature="e#10489#10907#0" expanded="false" />
+            <element signature="e#11014#11445#0" expanded="false" />
+            <element signature="e#11548#12393#0" expanded="false" />
+            <element signature="e#12498#13512#0" expanded="false" />
+            <element signature="e#13585#13968#0" expanded="false" />
+            <element signature="e#14040#15407#0" expanded="false" />
+            <element signature="e#15512#16347#0" expanded="false" />
+            <element signature="e#16452#17253#0" expanded="false" />
+            <element signature="e#17329#17511#0" expanded="false" />
+            <element signature="e#17571#17889#0" expanded="false" />
+            <element signature="e#18008#24715#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -24,7 +24,7 @@
                     <i class="glyphicon glyphicon-hand-right"></i>
                     {{arrlist[0]}}
                 </li>
-                <li ui-sref="role">
+                <li ui-sref="add">
                     <i class="glyphicon glyphicon-hand-right"></i>
                     {{arrlist[1]}}
                 </li>
@@ -56,10 +56,11 @@
     ;
 
     var app = angular.module("myApp", ["ui.router"]);
+
     app.controller("myCtrl", function ($rootScope, $scope, alldata) {
         $scope.type = ["ID", "登录名", "真实姓名", "角色", "手机", "邮箱", "状态", "创建时间", "操作"];
-        $scope.arrlist = ['功能配置', '角色管理', '用户管理'];
-        $scope.uilist = ['function', 'role', 'user'];
+        $scope.arrlist = ['功能配置', '添加用户', '用户管理'];
+        $scope.uilist = ['function', 'add', 'user'];
         $scope.list = function () {
             if ($scope.openlist) {
                 $scope.openlist = false;
@@ -87,9 +88,9 @@
                     url: "/function",
                     template: "<h5 class='title bold'>功能配置</h5>"
                 })
-                .state("role", {
-                    url: "/role",
-                    template: "<h5 class='title bold'>角色管理</h5>"
+                .state("add", {
+                    url: "/add",
+                    templateUrl: "./page/add.html"
                 })
                 .state("user", {
                     url: "/user",
@@ -166,7 +167,64 @@
             restrict: "EAMC",
             replace: true,
             scope: true,
-            template: '<div><div class="alert bg-light-gray"><label>登录名： <input type="text" placeholder="登录名" class="loginname"></label><label>登录名： <input type="text" placeholder="真实姓名" class="name"></label><label>角色： <input type="text" placeholder="角色" class="role"></label><label>手机： <input type="phone" placeholder="手机" class="phone"></label><label>邮箱： <input type="email" placeholder="邮箱" class="email"></label><label>状态： <select name="" id="sel"><option value="">启用</option><option value="">禁用</option></select></label><label><button class="true bg-gray">确定</button><button class="false">取消</button></label></div></div>'
+            template: '<div><div class="alert bg-light-gray"><label>登录名： <input type="text" placeholder="登录名" class="loginname"></label><label>真实姓名： <input type="text" placeholder="真实姓名" class="name"></label><label>角色： <input type="text" placeholder="角色" class="role"></label><label>手机： <input type="phone" placeholder="手机" class="phone"></label><label>邮箱： <input type="email" placeholder="邮箱" class="email"></label><label>状态： <select name="" id="sel"><option value="">启用</option><option value="">禁用</option></select></label><label><button class="true bg-gray">确定</button><button class="false">取消</button></label></div></div>'
+        }
+    });
+
+    app.directive("adduser", function () {
+        return {
+            restrict: "EAMC",
+            replace: true,
+            scope: true,
+            template: '<div><div class="add">' +
+            '<label>登录名： ' +
+            '<input type="text" placeholder="登录名" class="loginname" ng-model="loginname">' +
+            '</label>' +
+            '<label>真实姓名： ' +
+            '<input type="text" placeholder="真实姓名" class="name" ng-model="name">' +
+            '</label>' +
+            '<label>角色： ' +
+            '<input type="text" placeholder="角色" class="role" ng-model="role">' +
+            '</label>' +
+            '<label>手机： ' +
+            '<input type="phone" placeholder="手机" class="phone"  ng-model="telephone">' +
+            '</label>' +
+            '<label>邮箱： ' +
+            '<input type="email" placeholder="邮箱" class="email" ng-model="email">' +
+            '</label>' +
+            '<label>状态： ' +
+            '<select name="" id="sel" ng-model="state">' +
+            '<option value="">启用</option>' +
+            '<option value="">禁用</option>' +
+            '</select>' +
+            '</label>' +
+            '<label>' +
+            '<button class="" ng-click="addFn()">添加</button>' +
+            '</label>' +
+            '</div></div>',
+            controller: function ($scope, $rootScope) {
+                $scope.adddata = {};
+                $scope.alldata = $rootScope.alldata;
+                $scope.len = $rootScope.alldata.thirdata.length;
+                $scope.ID = $scope.len;
+
+                $scope.addFn = function () {
+                    $scope.adddata = {
+                        ID: ++$scope.len,
+                        parentid: 23,
+                        loginname: $scope.loginname,
+                        name: $scope.name,
+                        role: $scope.role,
+                        telephone: $scope.telephone,
+                        email: $scope.email,
+                        state: $scope.state,
+                        creattime: new Date().toLocaleString()
+                    }
+                    console.log($scope.adddata);
+                    $rootScope.alldata.thirdata.push($scope.adddata);
+                };
+
+            }
         }
     });
 
@@ -186,7 +244,7 @@
                 $scope.data = $rootScope.data;
                 $scope.len = "";
                 $scope.$watch("data", function (obj) {
-                   // console.log(obj)
+                    // console.log(obj)
                 });
 
             },
@@ -213,6 +271,7 @@
                                 scope.fildata.state = scope.search.state;
                             });
                         });
+
                         // 第几页;
                         $(iElement).on("click", ".input", function () {
                             if ($(this).val() < 1) {
@@ -230,9 +289,9 @@
                             $('.input').val(pagenum);
                             changepage(pagenum, scope.data.num);
                             $(this).css({
-                                color:"blue"
+                                color: "blue"
                             }).siblings('.pages').css({
-                                color:"#000"
+                                color: "#000"
                             })
                         });
 
@@ -259,7 +318,7 @@
                         $(iElement).on("click", '.alter', function () {
                             var parent = $(this).parents("tr");
                             var parId = parent.attr("ID");
-                            $(".alert").attr("index",parId);
+                            $(".alert").attr("index", parId);
                             scope.alldata.thirdata.forEach(function (obj, i) {
                                 if (obj.ID == parId) {
                                     scope.$apply(function () {
@@ -284,30 +343,31 @@
                             $(this).parents('.alert').hide();
                         });
                         $(iElement).on('click', '.true', function () {
-                            var id=$(this).parents(".alert").attr('index');
+                            var id = $(this).parents(".alert").attr('index');
                             scope.alldata.thirdata.forEach(function (obj, i) {
-                               if(obj.ID==id){
-                                   scope.$apply(function(){
-                                       obj.loginname=$('.loginname').val();
-                                       obj.name=$('.name').val();
-                                       obj.email=$('.email').val();
-                                       obj.role=$('.role').val();
-                                       obj.telephone=$('.phone').val();
-                                       obj.state= $("#sel").find("option:selected").text();
-                                       obj.creattime=new Date().toLocaleString();
-                                       $('.name').val('');
-                                       $('.email').val('');
-                                       $('.role').val('');
-                                       $('.phone').val('');
-                                       $('#sel').val('');
-                                       $('.loginname').val('');
-                                     
-                                   });
+                                if (obj.ID == id) {
+                                    scope.$apply(function () {
+                                        obj.loginname = $('.loginname').val();
+                                        obj.name = $('.name').val();
+                                        obj.email = $('.email').val();
+                                        obj.role = $('.role').val();
+                                        obj.telephone = $('.phone').val();
+                                        obj.state = $("#sel").find("option:selected").text();
+                                        obj.creattime = new Date().toLocaleString();
+                                        $('.name').val('');
+                                        $('.email').val('');
+                                        $('.role').val('');
+                                        $('.phone').val('');
+                                        $('#sel').val('');
+                                        $('.loginname').val('');
 
-                               }
+                                    });
+
+                                }
                                 $('.alert').hide();
                             });
                         });
+
                         // 下一页;
                         $(iElement).on("click", ".next", function () {
                             var val = $('.input').val() * 1;
@@ -317,16 +377,17 @@
                             }
                             $('.input').val(val);
                             changepage(val, scope.data.num);
-                            $('.pages').each(function(i,obj){
-                                if($(this).text()==val){
+                            $('.pages').each(function (i, obj) {
+                                if ($(this).text() == val) {
                                     $(this).css({
-                                        color:"blue"
+                                        color: "blue"
                                     }).siblings(".pages").css({
-                                        color:"#000"
+                                        color: "#000"
                                     })
                                 }
                             });
                         });
+
                         // 上一页;
                         $(iElement).on("click", ".prev", function () {
                             var val = $('.input').val() * 1;
@@ -336,16 +397,17 @@
                             }
                             $('.input').val(val);
                             changepage(val, scope.data.num);
-                            $('.pages').each(function(i,obj){
-                                if($(this).text()==val){
+                            $('.pages').each(function (i, obj) {
+                                if ($(this).text() == val) {
                                     $(this).css({
-                                        color:"blue"
+                                        color: "blue"
                                     }).siblings(".pages").css({
-                                        color:"#000"
+                                        color: "#000"
                                     })
                                 }
                             });
                         });
+
                         // init
                         function init() {
                             $('.input').val(1);
@@ -590,6 +652,7 @@
             ]
         }
     });
+
 </script>
 </body>
 </html>

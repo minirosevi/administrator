@@ -43,4 +43,10 @@ body {
 .input {
   width: 40px; }
 
+.add {
+  display: flex;
+  flex-direction: column; }
+  .add input {
+    border: 1px solid #001f3f; }
+
 /*# sourceMappingURL=index.css.map */
