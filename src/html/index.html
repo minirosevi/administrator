@@ -134,7 +134,7 @@
             '</tr>' +
             '</thead>' +
             '<tbody>' +
-            '<tr ng-repeat="obj in alldata.thirdata | filter:fildata" ID="{{obj.ID}}">' +
+            '<tr ng-repeat="obj in alldata.thirdata | filter:fildata" ID="{{obj.ID}}" class="tr">' +
             '<td>{{obj.ID}}</td>' +
             '<td>{{obj.loginname}}</td>' +
             '<td>{{obj.name}}</td>' +
@@ -167,7 +167,7 @@
             restrict: "EAMC",
             replace: true,
             scope: true,
-            template: '<div><div class="alert bg-light-gray"><label>登录名： <input type="text" placeholder="登录名" class="loginname"></label><label>真实姓名： <input type="text" placeholder="真实姓名" class="name"></label><label>角色： <input type="text" placeholder="角色" class="role"></label><label>手机： <input type="phone" placeholder="手机" class="phone"></label><label>邮箱： <input type="email" placeholder="邮箱" class="email"></label><label>状态： <select name="" id="sel"><option value="启用">启用</option><option value="禁用">禁用</option></select></label><label><button class="true bg-gray">确定</button><button class="false">取消</button></label></div></div>'
+            template: '<div><div class="alert bg-light-gray"><label>登录名： <input type="text" placeholder="登录名" class="loginname"></label><label>真实姓名： <input type="text" placeholder="真实姓名" class="name"></label><label>角色： <input type="text" placeholder="角色" class="role"></label><label>手机： <input type="tel" placeholder="手机" class="phone"></label><label>邮箱： <input type="email" placeholder="邮箱" class="email"></label><label>状态： <select name="" id="sel"><option value="启用">启用</option><option value="禁用">禁用</option></select></label><label><button class="true bg-gray">确定</button><button class="false">取消</button></label></div></div>'
         }
     });
 
@@ -187,7 +187,7 @@
             '<input type="text" placeholder="角色" class="role" ng-model="role">' +
             '</label>' +
             '<label>手机： ' +
-            '<input type="phone" placeholder="手机" class="phone"  ng-model="telephone">' +
+            '<input type="phone" placeholder="手机" class="tel"  ng-model="telephone">' +
             '</label>' +
             '<label>邮箱： ' +
             '<input type="email" placeholder="邮箱" class="email" ng-model="email">' +
@@ -242,21 +242,24 @@
                 $scope.fildata = {};
                 $scope.objdata = {};
                 $scope.data = $rootScope.data;
-                $scope.len = "";
                 $scope.$watch("data", function (obj) {
                     // console.log(obj)
                 });
-
             },
             compile: function () {
                 return {
                     post: function (scope, iElement, iAttrs, ctrl) {
                         init();
+                        // $('table').find('tbody').find(".tr").hide();
+                        changepage(1, scope.data.num);
                         // 查询;
                         $(iElement).on("click", ".btn", function () {
                             scope.$apply(function () {
                                 $('tbody').find("tr").show();
                                 scope.fildata.loginname = scope.search.loginname;
+                                scope.fildata.role = scope.search.role;
+                                scope.fildata.state = scope.search.state;
+
                             });
                         });
                         $(iElement).on('change', "#sel1", function () {
@@ -305,6 +308,7 @@
                                     scope.$apply(function () {
                                         scope.alldata.thirdata.splice(i, 1);
                                         parent.remove();
+                                        // alert( scope.alldata.thirdata.length);
                                         scope.data.len = scope.alldata.thirdata.length;
                                         scope.$emit("data", {
                                             len: scope.data.len
@@ -411,7 +415,7 @@
                         // init
                         function init() {
                             $('.input').val(1);
-                            changepage(1, scope.data.num);
+
                             $('.alert').hide();
                         }
 
@@ -421,6 +425,7 @@
                             for (var i = start; i < num * pagenum; i++) {
                                 $('tbody').find("tr").eq(i).show();
                             }
+                            $('tbody').find("tr").eq(0).show();
                         }
 
                     }
@@ -432,7 +437,6 @@
         }
 
     });
-
 
     app.service("alldata", function () {
         return {
