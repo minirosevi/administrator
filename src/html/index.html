@@ -46,7 +46,7 @@
 <script src="../js/jquery.js"></script>
 <script>
     function change(pages, len) {
-        var str = "<div><span>一共" + len + "条数据</span>  <span class='p10 prev'>上一页</span>";
+        var str = "<div> <span class='p10 prev'>上一页</span>";
         for (var i = 1; i <= pages * 1; i++) {
             str += "<span class='p10 pages'>" + i + "</span>";
         }
@@ -82,7 +82,8 @@
         }
     });
 
-    app.config(function ($stateProvider) {
+    app.config(function ($stateProvider,$urlRouterProvider) {
+        $urlRouterProvider.when("", "/home");
         $stateProvider
                 .state("function", {
                     url: "/function",

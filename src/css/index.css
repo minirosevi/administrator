@@ -49,4 +49,21 @@ body {
   .add input {
     border: 1px solid #001f3f; }
 
-/*# sourceMappingURL=index.css.map */
+.alert {
+  position: absolute;
+  top:0;
+  left: 0;
+  right:0;
+  bottom:0;
+  margin:auto;
+  width: 250px;
+  height:200px;
+}
+.alert label{
+  display: block;
+}
+.alert button{
+  width: 45%;
+  line-height: 50px;
+  text-align: center;
+}
