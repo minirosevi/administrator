@@ -167,7 +167,7 @@
             restrict: "EAMC",
             replace: true,
             scope: true,
-            template: '<div><div class="alert bg-light-gray"><label>登录名： <input type="text" placeholder="登录名" class="loginname"></label><label>真实姓名： <input type="text" placeholder="真实姓名" class="name"></label><label>角色： <input type="text" placeholder="角色" class="role"></label><label>手机： <input type="phone" placeholder="手机" class="phone"></label><label>邮箱： <input type="email" placeholder="邮箱" class="email"></label><label>状态： <select name="" id="sel"><option value="">启用</option><option value="">禁用</option></select></label><label><button class="true bg-gray">确定</button><button class="false">取消</button></label></div></div>'
+            template: '<div><div class="alert bg-light-gray"><label>登录名： <input type="text" placeholder="登录名" class="loginname"></label><label>真实姓名： <input type="text" placeholder="真实姓名" class="name"></label><label>角色： <input type="text" placeholder="角色" class="role"></label><label>手机： <input type="phone" placeholder="手机" class="phone"></label><label>邮箱： <input type="email" placeholder="邮箱" class="email"></label><label>状态： <select name="" id="sel"><option value="启用">启用</option><option value="禁用">禁用</option></select></label><label><button class="true bg-gray">确定</button><button class="false">取消</button></label></div></div>'
         }
     });
 
@@ -194,8 +194,8 @@
             '</label>' +
             '<label>状态： ' +
             '<select name="" id="sel" ng-model="state">' +
-            '<option value="">启用</option>' +
-            '<option value="">禁用</option>' +
+            '<option value="启用">启用</option>' +
+            '<option value="禁用" selected = "selected">禁用</option>' +
             '</select>' +
             '</label>' +
             '<label>' +
@@ -220,7 +220,7 @@
                         state: $scope.state,
                         creattime: new Date().toLocaleString()
                     }
-                    console.log($scope.adddata);
+                    console.log($scope.state);
                     $rootScope.alldata.thirdata.push($scope.adddata);
                 };
 
