@@ -68,17 +68,6 @@
 
         $scope.alldata = alldata;
 
-        $scope.$on("newDATA",function(e,d){
-            if(d.data!=''){
-                $scope.thirdata=function () {
-                    return d.data.map(function (i) {
-                        return i;
-                    });
-                };
-                pagechange($scope);
-            }
-        });
-
         $scope.thirdata = function () {
             return $scope.alldata.thirdata.map(function (i) {
                 return i;
@@ -91,6 +80,15 @@
         $scope.len = 1;
         $scope.value=1;
         pagechange($scope);
+
+        $scope.del=function(ID){
+            $scope.alldata.thirdata.forEach(function(obj,i){
+                if(obj.ID==ID){
+                    $scope.alldata.thirdata.splice(i,1);
+                }
+            });
+            pagechange($scope);
+        };
 
     }).config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.when("", "/user");
@@ -118,7 +116,7 @@
             var olddata = $scope.thirdata();
 
             $scope.allPage = Math.ceil(olddata.length / $scope.len);// 多少页;
-
+            console.log($scope.allPage);
             $scope.pageArr = [];// 存放页数;
             // 渲染页数按钮;
             for (var i = 2; i < $scope.allPage; i++) {
@@ -131,6 +129,7 @@
             $scope.pageShow = function (i) {
                 $scope.index = i - 1;// 下标;
                 $scope.numpage = i;// 数字;
+
                 // 点点点;
                 $scope.ell1 = false;
                 $scope.ell2 = false;
@@ -167,15 +166,20 @@
                     $scope.ell1 = true;
                     $scope.ell2 = false;
                     $scope.showArr = [];
+
                     for (var i = 1; i < $scope.middlePage; i++) {
                         $scope.showArr.push($scope.allPage - i)
                     }
-                }
-                if ($scope.allPage <= ($scope.middlePage - 1)) {
+                };
+
+                if ($scope.allPage <= ($scope.middlePage+1 )) {
+                    console.log(0);
                     $scope.ell1 = false;
                     $scope.ell2 = false;
                 }
+
                 $scope.cutData();
+
             };
 
             $scope.cutData = function () {
@@ -189,7 +193,8 @@
 
                 $scope.value=i;
 
-            }
+            };
+
             // 上一页,下一页;
             $scope.updown = function (i) {
                 if (i == "+") {
@@ -202,7 +207,8 @@
                     }
                 }
                 $scope.value=$scope.index+1;
-            }
+            };
+
             // 第几页;
             $scope.changeInput = function () {
                 var val = $('.inp').val();
@@ -212,22 +218,6 @@
 
             $scope.pageShow(1);
 
-            $scope.del = function (ID) {
-                $scope.alldata.thirdata.forEach(function (obj, i) {
-                    if (obj.ID == ID) {
-                        $scope.alldata.thirdata.splice(i, 1);
-                    }
-                });
-                $scope.thirdata = function () {
-                    return $scope.alldata.thirdata.map(function (i) {
-                        return i;
-                    });
-                };
-                $scope.newthirdata= $scope.thirdata();
-                $scope.$emit("newDATA",{
-                    data:$scope.newthirdata
-                });
-            }
         }
     });
 </script>
