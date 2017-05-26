@@ -67,6 +67,18 @@
         };
 
         $scope.alldata = alldata;
+
+        $scope.$on("newDATA",function(e,d){
+            if(d.data!=''){
+                $scope.thirdata=function () {
+                    return d.data.map(function (i) {
+                        return i;
+                    });
+                };
+                pagechange($scope);
+            }
+        });
+
         $scope.thirdata = function () {
             return $scope.alldata.thirdata.map(function (i) {
                 return i;
@@ -196,8 +208,10 @@
                 var val = $('.inp').val();
                 $scope.pageShow(val)
 
-            }
+            };
+
             $scope.pageShow(1);
+
             $scope.del = function (ID) {
                 $scope.alldata.thirdata.forEach(function (obj, i) {
                     if (obj.ID == ID) {
@@ -209,6 +223,10 @@
                         return i;
                     });
                 };
+                $scope.newthirdata= $scope.thirdata();
+                $scope.$emit("newDATA",{
+                    data:$scope.newthirdata
+                });
             }
         }
     });
