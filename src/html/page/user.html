@@ -1,3 +1,48 @@
 <h5 class="bold title">用户管理</h5>
-<contentmenu></contentmenu>
+<h6 class="text-light-blue pl10 lists">列表</h6>
+<table class="table f12">
+    <thead>
+    <tr>
+        <th ng-repeat="head in type">{{head}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="i in cutdata">
+        <td>{{i.ID}}</td>
+        <td>{{i.loginname}}</td>
+        <td>{{i.name}}</td>
+        <td>{{i.role}}</td>
+        <td>{{i.telephone}}</td>
+        <td>{{i.email}}</td>
+        <td>{{i.state}}</td>
+        <td>{{i.creattime}}</td>
+        <td>
+            <span class="alter" index="{{i.ID}}">修改</span>
+            <span class="del" ng-click="del(i.ID)">删除</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="pages">
 
+    <div class="pagenum">
+        <span class="changebtn f10" ng-click="updown('-')">上一页</span>
+
+        <span class="btn" ng-class="{bg:(index+1)==1}" ng-click="changedata(1)">1</span>
+
+        <span class="btn" ng-show="ell1">...</span>
+
+        <span ng-repeat="i in pageArr" class="btn" ng-class="{bg:(index+1)==i}" ng-click="changedata(i)"  ng-show="showArr.indexOf(i)!=-1">{{i}}</span>
+
+        <span class="btn" ng-show="ell2">...</span>
+
+                <span class="btn" ng-class="{bg:(index+1)==allPage}"
+                      ng-click="changedata(allPage)">{{allPage}}</span>
+
+        <span class="changebtn f10" ng-click="updown('+')">下一页</span>
+
+        <div>第<input type="number" min="1" max="{{allPage}}" ng-change="changeInput()" ng-model="value" class="inp"/>页
+        </div>
+
+    </div>
+</div>

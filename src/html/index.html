@@ -20,47 +20,44 @@
                 <i class="glyphicon glyphicon-plus"></i> 权限管理
             </div>
             <ul ng-show="openlist">
-                <li ui-sref="function">
+                <li ng-repeat="obj in arrlist" ui-sref="{{obj.route}}">
                     <i class="glyphicon glyphicon-hand-right"></i>
-                    {{arrlist[0]}}
-                </li>
-                <li ui-sref="add">
-                    <i class="glyphicon glyphicon-hand-right"></i>
-                    {{arrlist[1]}}
-                </li>
-                <li ui-sref="user">
-                    <i class="glyphicon glyphicon-hand-right"></i>
-                    {{arrlist[2]}}
+                    {{obj.title}}
                 </li>
             </ul>
         </div>
     </aside>
     <div class="content">
-        <div ui-view>
-        </div>
+        <div ui-view></div>
     </div>
 </section>
 
-<script src="../js/angular.js"></script>
-<script src="../js/angular-ui-router.js"></script>
-<script src="../js/jquery.js"></script>
+<script src="../js/common/angular.js"></script>
+<script src="../js/common/angular-ui-router.js"></script>
+<script src="../js/common/jquery.js"></script>
+
 <script>
-    function change(pages, len) {
-        var str = "<div> <span class='p10 prev'>上一页</span>";
-        for (var i = 1; i <= pages * 1; i++) {
-            str += "<span class='p10 pages'>" + i + "</span>";
-        }
-        str += '<span class="next p10">下一页</span>   <span>第 <input type="number" class="input">页</span></div>';
-        return str;
-    }
-    ;
 
-    var app = angular.module("myApp", ["ui.router"]);
+    var app = angular.module("myApp", ["ui.router"]).controller('myCtrl', function ($scope, alldata, pagechange) {
 
-    app.controller("myCtrl", function ($rootScope, $scope, alldata) {
         $scope.type = ["ID", "登录名", "真实姓名", "角色", "手机", "邮箱", "状态", "创建时间", "操作"];
-        $scope.arrlist = ['功能配置', '添加用户', '用户管理'];
-        $scope.uilist = ['function', 'add', 'user'];
+
+        $scope.arrlist = [
+            {
+                title: "功能配置",
+                route: "function"
+            },
+            {
+                title: "添加用户",
+                route: "add"
+            },
+            {
+                title: "用户管理",
+                route: "user"
+            }
+        ]
+
+        $scope.openlist = true;
         $scope.list = function () {
             if ($scope.openlist) {
                 $scope.openlist = false;
@@ -69,21 +66,21 @@
             }
         };
 
-        // 数据;
-        $rootScope.alldata = alldata;
+        $scope.alldata = alldata;
+        $scope.thirdata = function () {
+            return alldata.thirdata.map(function (i) {
+                return i;
+            });
+        };
 
-        $rootScope.data = {
-            num: 3,// 每页有几条;
-            len: $rootScope.alldata.thirdata.length,// 几条数据;
-            pages: function () {// 几页;
-                var pagenum = Math.ceil(this.len / this.num);
-                return pagenum;
-            }
-        }
-    });
+        // 分页信息;
+        $scope.middlePage=5;
+        $scope.len=3;
 
-    app.config(function ($stateProvider,$urlRouterProvider) {
-        $urlRouterProvider.when("", "/home");
+        pagechange($scope);
+
+    }).config(function ($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.when("", "/user");
         $stateProvider
                 .state("function", {
                     url: "/function",
@@ -98,566 +95,114 @@
                     templateUrl: "./page/user.html"
                 });
     });
+</script>
+<script src="../../data/data.js"></script>
+<script>
+    app.service("pagechange", function () {
+        return function ($scope) {
+            // 数据;
+            var olddata = $scope.thirdata();
 
-    app.directive("choice", function () {
-        return {
-            restrict: "EAMC",
-            replace: true,
+            $scope.allPage = Math.ceil(olddata.length/$scope.len);// 多少页;
 
-            template: '<div>' +
-            '<label for="sel1">角色' +
-            '<select name="" id="sel1"  class="sel1" ng-model="search.role" ng-options="item for item in names">' +
-            '</select>' +
-            '</label> | ' +
-            '<label for="sel2">状态' +
-            '<select name="" id="sel2" class="sel2" ng-model="search.state" ng-options="item for item in status">' +
-            '</select>' +
-            '</label> | ' +
-            '<label for="inp">登录名' +
-            '<input type="text" id="inp" ng-model="search.loginname">' +
-            '<button class="btn">查询</button>' +
-            '</label>' +
-            '</div>'
-        }
-    });
+            $scope.pageArr = [];// 存放页数;
+            // 渲染页数按钮;
+            for (var i = 2; i < $scope.allPage ; i++) {
+                $scope.pageArr.push(i);// 数字;
+            };
 
-    app.directive("page", function () {
-        return {
-            restrict: "EAMC",
-            replace: true,
-            scope: false,
-            template: '<div>' +
-            '<h6 class="text-light-blue pl10 lists">列表</h6>' +
-            '<table class="table f12">' +
-            '<thead>' +
-            '<tr>' +
-            '<th ng-repeat="i in type">{{i}}</th>' +
-            '</tr>' +
-            '</thead>' +
-            '<tbody>' +
-            '<tr ng-repeat="obj in alldata.thirdata | filter:fildata" ID="{{obj.ID}}" class="tr">' +
-            '<td>{{obj.ID}}</td>' +
-            '<td>{{obj.loginname}}</td>' +
-            '<td>{{obj.name}}</td>' +
-            '<td>{{obj.role}}</td>' +
-            '<td>{{obj.telephone}}</td>' +
-            '<td>{{obj.email}}</td>' +
-            '<td>{{obj.state}}</td>' +
-            '<td>{{obj.creattime}}</td>' +
-            '<td>' +
-            '<span class="alter" index="{{obj.ID}}">修改</span> | ' +
-            '<span class="del">删除</span>' +
-            '</td>' +
-            '</tbody>' +
-            '</table>' +
-            '</div>'
-        }
-    });
+            $scope.num = ($scope.middlePage - 1) / 2;// 当前页前后页数;
 
-    app.directive("clicks", function ($rootScope) {
-        return {
-            restrict: "EAMC",
-            replace: true,
-            scope: true,
-            template: change($rootScope.data.pages(), $rootScope.data.len)
-        }
-    });
+            $scope.pageShow = function (i) {
+                $scope.index = i-1;// 下标;
+                $scope.numpage = i;// 数字;
+                // 点点点;
+                $scope.ell1 = false;
+                $scope.ell2 = false;
 
-    app.directive("alerts", function () {
-        return {
-            restrict: "EAMC",
-            replace: true,
-            scope: true,
-            template: '<div><div class="alert bg-light-gray"><label>登录名： <input type="text" placeholder="登录名" class="loginname"></label><label>真实姓名： <input type="text" placeholder="真实姓名" class="name"></label><label>角色： <input type="text" placeholder="角色" class="role"></label><label>手机： <input type="tel" placeholder="手机" class="phone"></label><label>邮箱： <input type="email" placeholder="邮箱" class="email"></label><label>状态： <select name="" id="sel"><option value="启用">启用</option><option value="禁用">禁用</option></select></label><label><button class="true bg-gray">确定</button><button class="false">取消</button></label></div></div>'
-        }
-    });
+                if ($scope.index < ($scope.middlePage - $scope.num)) {
+                    $scope.ell1 = false;
+                    $scope.ell2 = true;
 
-    app.directive("adduser", function () {
-        return {
-            restrict: "EAMC",
-            replace: true,
-            scope: true,
-            template: '<div><div class="add">' +
-            '<label>登录名： ' +
-            '<input type="text" placeholder="登录名" class="loginname" ng-model="loginname">' +
-            '</label>' +
-            '<label>真实姓名： ' +
-            '<input type="text" placeholder="真实姓名" class="name" ng-model="name">' +
-            '</label>' +
-            '<label>角色： ' +
-            '<input type="text" placeholder="角色" class="role" ng-model="role">' +
-            '</label>' +
-            '<label>手机： ' +
-            '<input type="phone" placeholder="手机" class="tel"  ng-model="telephone">' +
-            '</label>' +
-            '<label>邮箱： ' +
-            '<input type="email" placeholder="邮箱" class="email" ng-model="email">' +
-            '</label>' +
-            '<label>状态： ' +
-            '<select name="" id="sel" ng-model="state">' +
-            '<option value="启用">启用</option>' +
-            '<option value="禁用" selected = "selected">禁用</option>' +
-            '</select>' +
-            '</label>' +
-            '<label>' +
-            '<button class="" ng-click="addFn()">添加</button>' +
-            '</label>' +
-            '</div></div>',
-            controller: function ($scope, $rootScope) {
-                $scope.adddata = {};
-                $scope.alldata = $rootScope.alldata;
-                $scope.len = $rootScope.alldata.thirdata.length;
-                $scope.ID = $scope.len;
+                    $scope.showArr = [];
 
-                $scope.addFn = function () {
-                    $scope.adddata = {
-                        ID: ++$scope.len,
-                        parentid: 23,
-                        loginname: $scope.loginname,
-                        name: $scope.name,
-                        role: $scope.role,
-                        telephone: $scope.telephone,
-                        email: $scope.email,
-                        state: $scope.state,
-                        creattime: new Date().toLocaleString()
+                    for (var i = 1; i <= $scope.middlePage; i++) {
+                        $scope.showArr.push(i)
                     }
-                    console.log($scope.state);
-                    $rootScope.alldata.thirdata.push($scope.adddata);
-                };
+
+                } else if ($scope.index >= $scope.middlePage - $scope.num && $scope.index <= $scope.allPage - ($scope.middlePage-1) / 2 - 2) {
+                    $scope.ell1 = true;
+                    $scope.ell2 = true;
+
+                    if($scope.index==$scope.middlePage-$scope.num){
+                        $scope.ell1=false;
+                    }
+                    if($scope.index==$scope.allPage-($scope.middlePage-1)/2-2){
+                        $scope.ell2=false;
+                    }
+
+                    $scope.showArr=[$scope.index+1];
+                    for(var i=0;i<$scope.num;i++){
+                        $scope.showArr.push($scope.index-i)
+                    }
+                    for(var i=2;i<=$scope.num+1;i++){
+                        $scope.showArr.push($scope.index+i)
+                    }
+                }else{
+                    $scope.ell1=true;
+                    $scope.ell2=false;
+                    $scope.showArr=[];
+                    for(var i=1;i<$scope.middlePage;i++){
+                        $scope.showArr.push($scope.allPage-i)
+                    }
+                }
+                if($scope.allPage<=($scope.middlePage-1)){
+                    $scope.ell1=false;
+                    $scope.ell2=false;
+                }
+                $scope.cutData();
+            };
+
+            $scope.cutData=function () {
+                var newdata=$scope.thirdata();
+                $scope.cutdata=newdata.splice($scope.index*$scope.len,$scope.len);
+            }
+
+            $scope.changedata=function (i) {
+                $scope.pageShow(i);
 
             }
-        }
-    });
+             // 上一页,下一页;
+            $scope.updown=function (i) {
+                if(i=="+"){
+                    if(($scope.index+1)< $scope.allPage){
+                        $scope.pageShow($scope.index+2)
+                    }
+                }else{
+                    if($scope.index>0){
+                        $scope.pageShow($scope.index)
+                    }
+                }
+            }
+            // 第几页;
+            $scope.changeInput=function () {
+                var val=$('.inp').val();
+                $scope.pageShow(val)
 
-    app.directive("contentmenu", function () {
-        return {
-            restrict: "EAMC",
-            replace: true,
-            scope: false,
-            template: '<div><choice></choice><page></page><clicks></clicks><alerts></alerts></div>',
+            }
+            $scope.pageShow(1);
 
-            controller: function ($scope, $rootScope, alldata) {
-                $scope.names = ["管理员", "13管理员aaa", "13管理"];
-                $scope.status = ["启用", "禁用"];
-                $scope.alldata = $rootScope.alldata;
-                $scope.fildata = {};
-                $scope.objdata = {};
-                $scope.data = $rootScope.data;
-                $scope.$watch("data", function (obj) {
-                    // console.log(obj)
+            newDATA={};
+
+            $scope.del=function(ID){
+                olddata.forEach(function(obj,i){
+                   if(obj.ID==ID){
+                       olddata.splice(i,1);
+                   }
                 });
-            },
-            compile: function () {
-                return {
-                    post: function (scope, iElement, iAttrs, ctrl) {
-                        init();
-                        // $('table').find('tbody').find(".tr").hide();
-                        changepage(1, scope.data.num);
-                        // 查询;
-                        $(iElement).on("click", ".btn", function () {
-                            scope.$apply(function () {
-                                $('tbody').find("tr").show();
-                                scope.fildata.loginname = scope.search.loginname;
-                                scope.fildata.role = scope.search.role;
-                                scope.fildata.state = scope.search.state;
-
-                            });
-                        });
-                        $(iElement).on('change', "#sel1", function () {
-                            scope.$apply(function () {
-                                $('tbody').find("tr").show();
-                                scope.fildata.role = scope.search.role;
-                            });
-                        });
-                        $(iElement).on('change', "#sel2", function () {
-                            scope.$apply(function () {
-                                $('tbody').find("tr").show();
-                                scope.fildata.state = scope.search.state;
-                            });
-                        });
-
-                        // 第几页;
-                        $(iElement).on("click", ".input", function () {
-                            if ($(this).val() < 1) {
-                                $(this).val(1);
-                            } else if ($(this).val() > scope.data.pages()) {
-                                $(this).val(scope.data.pages());
-                            }
-                            var val = $(this).val() * 1;
-                            changepage(val, scope.data.num);
-                        });
-
-                        // 点击页数;
-                        $(iElement).on('click', '.pages', function () {
-                            var pagenum = ($(this).text()) * 1;
-                            $('.input').val(pagenum);
-                            changepage(pagenum, scope.data.num);
-                            $(this).css({
-                                color: "blue"
-                            }).siblings('.pages').css({
-                                color: "#000"
-                            })
-                        });
-
-                        // 删除;
-                        $(iElement).on("click", ".del", function () {
-                            var parent = $(this).parents("tr");
-                            var parId = parent.attr("ID");
-                            scope.alldata.thirdata.forEach(function (obj, i) {
-
-                                if (obj.ID == parId) {
-                                    scope.$apply(function () {
-                                        scope.alldata.thirdata.splice(i, 1);
-                                        parent.remove();
-                                        // alert( scope.alldata.thirdata.length);
-                                        scope.data.len = scope.alldata.thirdata.length;
-                                        scope.$emit("data", {
-                                            len: scope.data.len
-                                        })
-                                    });
-                                }
-                            });
-                        });
-
-                        // 修改;
-                        $(iElement).on("click", '.alter', function () {
-                            var parent = $(this).parents("tr");
-                            var parId = parent.attr("ID");
-                            $(".alert").attr("index", parId);
-                            scope.alldata.thirdata.forEach(function (obj, i) {
-                                if (obj.ID == parId) {
-                                    scope.$apply(function () {
-                                        $(".alert").show();
-                                        $('.name').val(obj.name);
-                                        $('.email').val(obj.email);
-                                        $('.role').val(obj.role);
-                                        $('.phone').val(obj.telephone);
-                                        $('.loginname').val(obj.loginname);
-                                        $('#sel').find("option:selected").text(obj.state);
-                                    });
-                                }
-                            });
-                        });
-                        $(iElement).on('click', '.false', function () {
-                            $('.name').val('');
-                            $('.email').val('');
-                            $('.role').val('');
-                            $('.phone').val('');
-                            $('#sel').val('');
-                            $('.loginname').val('');
-                            $(this).parents('.alert').hide();
-                        });
-                        $(iElement).on('click', '.true', function () {
-                            var id = $(this).parents(".alert").attr('index');
-                            scope.alldata.thirdata.forEach(function (obj, i) {
-                                if (obj.ID == id) {
-                                    scope.$apply(function () {
-                                        obj.loginname = $('.loginname').val();
-                                        obj.name = $('.name').val();
-                                        obj.email = $('.email').val();
-                                        obj.role = $('.role').val();
-                                        obj.telephone = $('.phone').val();
-                                        obj.state = $("#sel").find("option:selected").text();
-                                        obj.creattime = new Date().toLocaleString();
-                                        $('.name').val('');
-                                        $('.email').val('');
-                                        $('.role').val('');
-                                        $('.phone').val('');
-                                        $('#sel').val('');
-                                        $('.loginname').val('');
-
-                                    });
-
-                                }
-                                $('.alert').hide();
-                            });
-                        });
-
-                        // 下一页;
-                        $(iElement).on("click", ".next", function () {
-                            var val = $('.input').val() * 1;
-                            val++;
-                            if (val > scope.data.pages()) {
-                                val = scope.data.pages();
-                            }
-                            $('.input').val(val);
-                            changepage(val, scope.data.num);
-                            $('.pages').each(function (i, obj) {
-                                if ($(this).text() == val) {
-                                    $(this).css({
-                                        color: "blue"
-                                    }).siblings(".pages").css({
-                                        color: "#000"
-                                    })
-                                }
-                            });
-                        });
-
-                        // 上一页;
-                        $(iElement).on("click", ".prev", function () {
-                            var val = $('.input').val() * 1;
-                            val--;
-                            if (val < 1) {
-                                val = 1;
-                            }
-                            $('.input').val(val);
-                            changepage(val, scope.data.num);
-                            $('.pages').each(function (i, obj) {
-                                if ($(this).text() == val) {
-                                    $(this).css({
-                                        color: "blue"
-                                    }).siblings(".pages").css({
-                                        color: "#000"
-                                    })
-                                }
-                            });
-                        });
-
-                        // init
-                        function init() {
-                            $('.input').val(1);
-
-                            $('.alert').hide();
-                        }
-
-                        function changepage(pagenum, num) {
-                            $("tbody").find("tr").hide();
-                            var start = (pagenum - 1) * num;
-                            for (var i = start; i < num * pagenum; i++) {
-                                $('tbody').find("tr").eq(i).show();
-                            }
-                            $('tbody').find("tr").eq(0).show();
-                        }
-
-                    }
-                }
-
-
             }
-
-        }
-
-    });
-
-    app.service("alldata", function () {
-        return {
-            fstdata: [
-                {
-                    id: 1,
-                    name: '个人中心',
-                    nickname: '账户管理'
-                },
-                {
-                    id: 2,
-                    name: '系统设置',
-                    nickname: '权限管理'
-                }
-            ],
-            secdata: [
-                {
-                    id: 11,
-                    parentid: 1,
-                    name: '个人信息',
-                    page: 'grxx.html'
-                },
-                {
-                    id: 12,
-                    parentid: 1,
-                    name: '修改密码',
-                    page: 'xgmm.html'
-                },
-                {
-                    id: 21,
-                    parentid: 2,
-                    name: '功能配置',
-                    page: 'gnpz.html'
-                },
-                {
-                    id: 22,
-                    parentid: 2,
-                    name: '角色管理',
-                    page: 'jsgl.html'
-                },
-                {
-                    id: 23,
-                    parentid: 2,
-                    name: '用户管理',
-                    page: 'yhgl.html'
-                }
-            ],
-            thirdata: [
-                {
-                    ID: 1,
-                    parentid: 23,
-                    loginname: 'zhangsan',
-                    name: '张三',
-                    role: '13管理员aaa',
-                    telephone: '15098950322',
-                    email: '837990335@qq.com',
-                    state: '启用',
-                    creattime: '2014-07-27 16:56'
-                },
-                {
-                    ID: 2,
-                    parentid: 23,
-                    loginname: 'lisi',
-                    name: '李四',
-                    role: '13管理员aaa',
-                    telephone: '15098950322',
-                    email: '837990335@qq.com',
-                    state: '禁用',
-                    creattime: '2014-07-27 16:56'
-                },
-                {
-                    ID: 3,
-                    parentid: 23,
-                    loginname: 'wangwu',
-                    name: '王五',
-                    role: '13管理员aaa',
-                    telephone: '15098950322',
-                    email: '837990335@qq.com',
-                    state: '启用',
-                    creattime: '2014-07-27 16:56'
-                },
-                {
-                    ID: 4,
-                    parentid: 23,
-                    loginname: 'zhangchen',
-                    name: '张晨',
-                    role: '13管理员aaa',
-                    telephone: '15098950322',
-                    email: '837990335@qq.com',
-                    state: '启用',
-                    creattime: '2014-07-27 16:56'
-                },
-                {
-                    ID: 5,
-                    parentid: 23,
-                    loginname: 'liucheng',
-                    name: '刘成',
-                    role: '管理员',
-                    telephone: '15098950322',
-                    email: '837990335@qq.com',
-                    state: '禁用',
-                    creattime: '2014-07-27 16:56'
-                },
-                {
-                    ID: 6,
-                    parentid: 23,
-                    loginname: 'liji',
-                    name: '李继',
-                    role: '13管理员aaa',
-                    telephone: '15098950322',
-                    email: '837990335@qq.com',
-                    state: '禁用',
-                    creattime: '2014-07-27 16:56'
-                },
-                {
-                    ID: 7,
-                    parentid: 23,
-                    loginname: 'yuantao',
-                    name: '袁涛',
-                    role: '13管理',
-                    telephone: '15098950322',
-                    email: '837990335@qq.com',
-                    state: '启用',
-                    creattime: '2014-07-27 16:56'
-                },
-                {
-                    ID: 8,
-                    parentid: 23,
-                    loginname: 'wangjian',
-                    name: '王建',
-                    role: '管理员',
-                    telephone: '15098950322',
-                    email: '837990335@qq.com',
-                    state: '禁用',
-                    creattime: '2014-07-27 16:56'
-                }
-            ],
-            fourdata: [
-                {
-                    ID: 1,
-                    role: "管理员",
-                    state: "启用",
-                    orders: 0,
-                    creattime: '2014-07-27 16:35'
-                },
-                {
-                    ID: 2,
-                    role: "管理员2",
-                    state: "禁用",
-                    orders: 2,
-                    creattime: '2014-07-27 16:35'
-                },
-                {
-                    ID: 3,
-                    role: "管理员",
-                    state: "禁用",
-                    orders: 5,
-                    creattime: '2014-07-27 16:35'
-                },
-                {
-                    ID: 4,
-                    role: "管理员2",
-                    state: "启用",
-                    orders: 0,
-                    creattime: '2014-07-27 16:35'
-                },
-                {
-                    ID: 5,
-                    role: "管理员0",
-                    state: "启用",
-                    orders: 2,
-                    creattime: '2014-07-27 16:35'
-                },
-                {
-                    ID: 6,
-                    role: "管理员1",
-                    state: "禁用",
-                    orders: 0,
-                    creattime: '2014-07-27 16:35'
-                },
-                {
-                    ID: 7,
-                    role: "管理员是",
-                    state: "启用",
-                    orders: 0,
-                    creattime: '2014-07-27 16:35'
-                },
-                {
-                    ID: 8,
-                    role: "管理员0",
-                    state: "启用",
-                    orders: 1,
-                    creattime: '2014-07-27 16:35'
-                },
-                {
-                    ID: 9,
-                    role: "管理员2",
-                    state: "启用",
-                    orders: 0,
-                    creattime: '2014-07-27 16:35'
-                },
-                {
-                    ID: 10,
-                    role: "管理2",
-                    state: "启用",
-                    orders: 0,
-                    creattime: '2014-07-27 16:35'
-                },
-                {
-                    ID: 11,
-                    role: "管理员2",
-                    state: "禁用",
-                    orders: 0,
-                    creattime: '2014-07-27 16:35'
-                }
-
-            ]
         }
     });
-
 </script>
 </body>
 </html>

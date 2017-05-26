@@ -67,3 +67,26 @@ body {
   line-height: 50px;
   text-align: center;
 }
+
+.pages{
+  display: flex;
+}
+.pages .num{
+  width:150px
+}
+.pagenum{
+  display: flex;
+}
+.pagenum span {
+  width: 50px;
+  height: 30px;
+  border: 1px solid #000;
+  margin: 0 3px;
+}
+.pagenum .btn{
+  width: 30px;
+}
+.bg{
+  background-color: #0088cc;
+  color:#fff;
+}
