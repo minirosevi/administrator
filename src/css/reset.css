@@ -22,13 +22,13 @@ body {
 
 img,div,body,html,ul,li,a{ -webkit-touch-callout: none; }
 
-a:active,input,button{ background-color: transparent !important;
- -webkit-tap-highlight-color: transparent; border:0;outline:none;}
+/*a:active,input,button{ background-color: transparent !important;
+ -webkit-tap-highlight-color: transparent; border:0;outline:none;}*/
 
 input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {
     color: #cfcfcf;
 }
-input{-webkit-appearance:none;}
+/*input{-webkit-appearance:none;}*/
 
 
 

@@ -1,4 +1,25 @@
 <h5 class="bold title">用户管理</h5>
+<div class="choice">
+    <label for="">
+        状态： <select name="" id="" ng-model="tstates">
+        <option value="">全部</option>
+        <option value="启用">启用</option>
+        <option value="禁用">禁用</option>
+    </select>
+    </label> |
+    <label for="">
+        角色：<select name=""  ng-model="troles">
+        <option value="">全部</option>
+        <option value="管理员">管理员</option>
+        <option value="13管理">13管理</option>
+        <option value="13管理员aaa">13管理员aaa</option>
+        </select>
+    </label>  |
+    <label for="">
+        登录名： <input type="text" ng-model="tlogin">
+    </label>
+    <button class="btn" ng-click="searchFn()">搜索</button>
+</div>
 <h6 class="text-light-blue pl10 lists">列表</h6>
 <table class="table f12">
     <thead>
@@ -17,15 +38,15 @@
         <td>{{i.state}}</td>
         <td>{{i.creattime}}</td>
         <td>
-            <span class="alter" index="{{i.ID}}">修改</span>
-            <span class="del" ng-click="del(i.ID)">删除</span>
+            <span class="alter" ng-click="alterFn(i)">修改</span>
+            <span class="del" ng-click="delFn(i)">删除</span>
         </td>
     </tr>
     </tbody>
 </table>
 <div class="pages">
 
-    <div class="pagenum">
+    <div class="pagenum" ng-show="pagenum">
         <span class="changebtn f10" ng-click="updown('-')">上一页</span>
 
         <span class="btn" ng-class="{bg:(index+1)==1}" ng-click="changedata(1)">1</span>
@@ -37,15 +58,18 @@
         <span class="btn" ng-show="ell2">...</span>
 
                 <span class="btn" ng-class="{bg:(index+1)==allPage}"
-                      ng-click="changedata(allPage)">{{allPage}}</span>
+                      ng-click="changedata(allPage)" ng-show="lastpage">{{allPage}}</span>
 
         <span class="changebtn f10" ng-click="updown('+')">下一页</span>
 
         <div>
             第
-            <input type="number" min="1" max="{{allPage}}" ng-change="changeInput()" ng-model="value" class="inp" value="1" />
+            <input type="number" min="1" max="{{allPage}}" ng-change="changeInput()" ng-model="value" class="inp" value="1"/>
             页
         </div>
 
     </div>
 </div>
+<deldialog></deldialog>
+<thiralter></thiralter>
+<adduser></adduser>

@@ -1,0 +1,14 @@
+<section class="section">
+    <aside class="aside pl10 pr10">
+      <h5 class="bold">我的工作平台</h5>
+        <div>
+           <p ng-click="showFn()">{{parentName}}</p>
+            <ul ng-show="showlist">
+                <li ng-repeat="i in data" ui-sref="{{i.route}}">{{i.name}}</li>
+            </ul>
+        </div>
+    </aside>
+    <div class="content">
+        <div ui-view=""></div>
+    </div>
+</section>

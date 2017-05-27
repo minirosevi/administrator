@@ -1,0 +1,6 @@
+<header class="header bg-blue text-white">
+    通用权限系统
+    <nav class="f12 ml20">
+        <span ng-repeat="i in data" ui-sref="{{i.route}}({id:{{i}}})" class="pl5 pr5">{{i.name}}</span>
+    </nav>
+</header>

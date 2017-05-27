@@ -1,0 +1,39 @@
+<h5 class="bold title">用户管理</h5>
+<div class="choice">
+    <label for="">
+        状态： <select name="" id="" ng-model="states">
+        <option value="">全部</option>
+        <option value="启用">启用</option>
+        <option value="禁用">禁用</option>
+    </select>
+    </label> |
+    <label for="">
+        角色：<input type="text" id="inp" ng-model="roles">
+    </label>
+    <button class="btn" ng-click="searchFn()">搜索</button>
+</div>
+<h6 class="text-light-blue pl10 lists">列表</h6>
+
+<table class="table f12">
+    <thead>
+    <tr>
+        <th ng-repeat="head in roleType">{{head}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="i in cutdata">
+        <td>{{i.ID}}</td>
+        <td>{{i.role}}</td>
+        <td>{{i.state}}</td>
+        <td>{{i.orders}}</td>
+        <td>{{i.creattime}}</td>
+        <td>
+            <span class="alter" ng-click="alterFn(i)">修改</span>
+            <span class="del" ng-click="delFn(i)">删除</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<deldialog></deldialog>
+<alterdialog></alterdialog>

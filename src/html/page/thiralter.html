@@ -1,0 +1,31 @@
+<div>
+    <div class="bg-blue text-white alterdialog dialog" ng-show="alterSH">
+        <h4 class="f14">修改</h4>
+        <label for="">
+            登录名: <input type="text" ng-model="alterData.loginname" required ng-class="{red:logincolor}">
+        </label>
+        <label for="">
+            真实姓名: <input type="text" ng-model="alterData.name" required ng-class="{red:namecolor}">
+        </label>
+        <label for="">
+            角色: <input type="text" ng-model="alterData.role">
+        </label>
+        <label for="">
+            手机: <input type="tel" ng-model="alterData.telephone" required ng-class="{red:telcolor}">
+        </label>
+        <label for="">
+            邮箱: <input type="email" ng-model="alterData.email" required ng-class="{red:emailcolor}">
+        </label>
+        <label for="">
+            状态: <input type="radio" ng-model="fourState" ng-value="start"
+                       name="state" ng-change="changeStateFn('启用')">
+            启用  |
+            <input type="radio" ng-model="fourState" ng-value="stop" name="state"
+                   ng-change="changeStateFn('禁用')">禁用
+        </label>
+        <div class="f12">
+            <span ng-click="okFn()">确定</span>
+            <span ng-click="noFn()">取消</span>
+        </div>
+    </div>
+</div>

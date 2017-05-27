@@ -1,2 +1,39 @@
-<h5 class='title bold'>添加用户</h5>
-<adduser></adduser>
+<div>
+    <h5 class='title bold'>添加用户</h5>
+    <label for="">
+        登录名: <input type="text" ng-model="addData.loginname" ng-class="{red:addlogincolor}">
+        <span class="text-light-red" ng-show="loginnameSH">*  只能是字母</span>
+    </label>
+    <br>
+    <label for="">
+        真实姓名: <input type="text" ng-model="addData.name" ng-class="{red:addnamecolor}">
+        <span class="text-light-red" ng-show="nameSH">*  只能是汉字</span>
+    </label>
+    <br>
+    <label for="">
+        角色: <input type="text" ng-model="addData.role">
+    </label>
+    <br>
+    <label for="">
+        手机: <input type="tel" ng-model="addData.telephone"  ng-class="{red:addtelcolor}">
+        <span class="text-light-red" ng-show="telSH">*  请填写中国手机号码</span>
+    </label>
+    <br>
+    <label for="">
+        邮箱: <input type="email" ng-model="addData.email"  ng-class="{red:addemailcolor}">
+        <span class="text-light-red" ng-show="emailSH">*  邮箱格式不正确</span>
+    </label>
+    <br>
+    <label for="">
+        状态: <input type="radio" ng-model="addfourState" ng-value="addstart"
+                   name="addstate" ng-change="addchangeStateFn('启用')">
+        启用  |
+        <input type="radio" ng-model="addfourState" ng-value="addstop" name="addstate"
+               ng-change="addchangeStateFn('禁用')">禁用
+    </label>
+    <br>
+    <div class="f12">
+        <span ng-click="addokFn()">确定</span> |
+        <span ng-click="addnoFn()">取消</span>
+    </div>
+</div>
